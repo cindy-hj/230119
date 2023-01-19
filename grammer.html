@@ -1,0 +1,129 @@
+<!-- jsfiddle에서 가져옴 -->
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+  </script>
+  
+    <div id="app">
+        <!-- 1. 데이터 바인딩
+        => html 영역과 스크립트 영역 연결하기 -->
+        <h1>{{ user }}</h1>
+        <!-- => 변수에 저장한 데이터를 활용할때
+        => 태그의 내용으로 삽입하는 방법 -->
+        <h1 v-text="user"></h1>
+        <!-- => 변수에 저장한 데이터를 활용할때
+        => 태그의 속성으로 삽입하는 방법 -->
+        <h1>{{ arr }}</h1>
+        <h1>{{ arr[0] }}</h1>
+        <h1>{{ arr[1] }}</h1>
+        <h1>{{ arr[2] }}</h1>
+
+        <h1>{{ obj }}</h1>
+        <h1>{{ obj.키1 }}</h1>
+        <h1>{{ obj.키2 }}</h1>
+        <h1>{{ obj.키3 }}</h1>
+
+        <p v-html="button1"></p>
+        <p v-html="button2"></p>
+        <p v-html="button3"></p>
+        <!-- =>태그를 인식해서 기본 바디에 스크립트를 사용하는 방식으로 데이터를 관리함 -->
+    
+        <h2>스타일속성 변경</h2>
+        <!-- => 제이쿼리 attr과 동일한 기능 -->
+        <h2 v-bind:id="st_attr">bind로 스타일 변경</h2>
+        <!-- <h2 :id="속성값">v-bind는 :으로 대체 가능</h2>
+        => 속성의 데이터 변경
+        => 부모에서 자식 영역으로 메세지 보낼때도 -->
+        <a :href="url">네이버</a>
+        <!-- 조건식
+        v-if
+        v-else
+        v-else-if -->
+        <h2 v-if="showH">보였다 안보였다</h2>
+        <h2 v-else>위에 if가 거짓일때 보여짐</h2>
+        <!-- => 조건문일때는 형제관계 유지되어야 하고 연속적인 작성이 되어야 인식함 -->
+        <!-- <h2 v-else-if="추가조건">조건추가</h2> -->
+        <!-- 성인인지 아닌지 판단하기 
+        1. 20 이상이면 성인
+        2. 14~20 미만이면 청소년
+        3. 그외 어린이-->
+        <h2 v-if="userList.age>=20">성인입니다.</h2>
+        <h2 v-else-if="userList.age>14 && userList.age<20">청소년입니다.</h2>
+        <h2 v-else>어린이입니다.</h2>
+
+        <!-- 반복문
+        v-for=() in 반복횟수값
+        :key=인수삽입-->
+        <ul>
+            <li v-for="a in fruits" :key="a">{{ a }}</li>
+        </ul>
+        <ul>
+            <!-- 배열에서 v-for돌리면 (요소값, 인덱스)의 순서는 정해져 있음. 
+                그래서 인덱스를 안넣을수는 있지만 요소값 없이 인덱스를 넣을 수는 없다.
+                key값에는 index를 넣든 요소를 넣든 아무거나 넣어도됨. key가 없으면 vue에서 오류 발생 -->
+            <li v-for="(a, index) in fruits" :key="index">
+                {{ index+1 }}{{a}}
+            </li>
+        </ul>
+        <!-- 객체에서 v-for돌리면 (값, 키, 인덱스)의 순서로 정해져있음.
+        내가 value로 안넣고 a로 넣어도 되지만 자리가 값의 자리이면 a가 값을 받아옴 -->
+        <h2 v-for="(value, key, index) of userList" :key="key">{{ key }}::{{ value }}::{{ index }}</h2>
+        
+        <!-- 중첩반복 
+        1. 객체를 배열의 요소로 삽입
+        키:키값 각 객체 요소 2개 작성후
+        2. for문으로 출력하기-->
+        <ul v-for="(value, key) of animals" :key="key">
+            <!-- animals[key]과 value가 같은결과로 나오네...? -->
+            <h2>animal==>{{ value.name }}</h2><br />
+            <h3>food</h3>
+            <!-- <li>{{ value.food }}</li> -->
+            <li v-for="(foodval, foodkey) of value.food" :key="key">
+                {{ foodval }}
+            </li>
+        </ul>
+
+        <!-- 3항연산자
+        조건?참일경우:거짓일경우 -->
+    </div>
+  
+  <script type="module">
+    import { createApp } from 'vue'
+  
+    createApp({
+      data() {
+        return {
+            user: "수정하기",
+            arr: ["배열1","배열2","배열3"],
+            obj: {키1:"키값1", 키2:"키값2", 키3:"키값3"},
+            button1: "<button>클릭</button>",
+            button2: `<button onclick='alert("경고창")'>클릭</button>`,
+            button3: `<button onclick='document.body.style="background:beige;"'>클릭</button>`,
+            st_attr: "st_bg",
+            url: "http://www.naver.com",
+            showH: false,
+            userList: {
+                name: "Tom",
+                age: 15,
+                job: "student",
+            },
+            fruits:['바나나','딸기','사과','멜론','망고'],
+            animals: [
+                {name: "monkey", size: "medium", food: ["banana", "apple"]},
+                {name: "lion", size: "large", food: ["deer", "cow"]},
+                {name: "rat", size: "small", food: ["cheese", "melon"]},
+            ]
+        }
+
+
+      }
+    }).mount('#app')
+  </script>
+  <style>
+    #st_bg{
+        background: skyblue;
+    }
+  </style>
